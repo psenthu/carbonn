@@ -1,0 +1,22 @@
+{
+  "name": "carbonn",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node app"
+  },
+  "dependencies": {
+    "apiserver"      : "*",
+    "mongoose"       : "*",
+    "passport"       : "*",
+    "passport-local" : "*",
+    "q"              : "*"
+  },
+
+  "devDependencies": {
+    "async"   : "*",
+    "request" : "*",
+    "should"  : "*",
+    "assert"  : "*"
+  }
+}
