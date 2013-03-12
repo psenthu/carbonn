@@ -1,15 +1,25 @@
-var should    = require('should');
+var should  = require('should');
+var version = require('../version.js');
 
-describe('test versioning symatics',function(done){
-	it('should return true',function(done){
-		true.should.be.equal(true);
-		done();
-	});
-});
+describe('test latest version fetch', function (done) {
+  describe('fetchLatestVersions()', function (done) {
+    it('should return 2 array elements', function (done) {
+      var latest = ['0.0.2', '0.0.3'];
+      var args = {
+        querystring: {
+          client: 'mbase',
+          application: 'pos',
+          os: 'windows',
+          bit: 64,
+          version: '0.0.1'
+        }
+      };
 
-describe('test greater version', function(done) {
-  it('should return true', function(done) {
-    true.should.be.equal(true);
-    done();
+      version.fetchLatestVersions(args, function (results) {
+        console.log(results);
+        done();
+      });
+    });
   });
 });
+//update/:client/:application/:os/:bit/:version
