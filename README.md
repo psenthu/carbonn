@@ -1,4 +1,4 @@
 carbonn
 =======
 
-Automate Package update system.
+Automated Package update system.
