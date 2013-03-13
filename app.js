@@ -20,5 +20,5 @@ apiServer.on('requestStart', function (pathname, time) {
 }).on('timeout', function (pathname) {
   console.info(' ☂ :: timedout :: %s', pathname);
 });
-
+exports.apiServer = apiServer;
 apiServer.listen();

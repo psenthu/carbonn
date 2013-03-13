@@ -1,11 +1,5 @@
-var semver = require('semver');
-var Version = require('./models/version.js');
-var mongoose = require('mongoose');
-
-exports = module.exports = function () {
-  console.log('version.js file loaded');
-  mongoose.connect('mongodb://localhost/carbonn');
-}
+var semver   = require('semver');
+var Version  = require('./models/version.js').Version;
 
 exports.fetchLatestVersions = function (request, done) {
   Version
@@ -19,3 +13,5 @@ exports.fetchLatestVersions = function (request, done) {
       done(versions);
     });
 };
+
+exports.model = Version;
