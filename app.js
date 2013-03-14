@@ -1,5 +1,5 @@
 var ApiServer = require('apiserver');
-var updateHandler = require('./update-handler.js');
+var updateHandler = require('./lib/update-handler.js').UpdateHandler;
 var apiServer = new ApiServer({ port: 8080 });
 
 apiServer.use(ApiServer.payloadParser());

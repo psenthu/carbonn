@@ -1,57 +1,73 @@
 var should    = require('should');
-var version   = require('../version.js');
+var version   = require('../lib/version.js');
 var apiServer = require('../app.js');
 
+process.env.NODE_ENV = 'test';
 
-describe('test latest version fetch', function (done) {
+describe('Version management', function (done) {
+  beforeEach(function (done) {
+    function callback(r) {
+      //do nothing
+    }
 
-  before(function(done){
-    version.model.remove(function(){
+    var fakeVersions = [
+      {client: 'mbase', application: 'pos',   operatingSystems: 'windows', bitVersion: 64, version: '0.0.1', updateableFrom: ['0.0.0'], downloadUrl: 'http://google.com', releaseDate: new Date(2013, 2, 13)},
+      {client: 'mbase', application: 'pos',   operatingSystems: 'linux',   bitVersion: 64, version: '0.0.1', updateableFrom: ['0.0.0'], downloadUrl: 'http://google.com', releaseDate: new Date(2013, 2, 13)},
+      {client: 'mbase', application: 'pos',   operatingSystems: 'mac',     bitVersion: 64, version: '0.0.1', updateableFrom: ['0.0.0'], downloadUrl: 'http://google.com', releaseDate: new Date(2013, 2, 13)},
+      {client: 'mbase', application: 'music', operatingSystems: 'windows', bitVersion: 64, version: '0.0.1', updateableFrom: ['0.0.0'], downloadUrl: 'http://google.com', releaseDate: new Date(2013, 2, 13)},
+      {client: 'mbase', application: 'music', operatingSystems: 'linux',   bitVersion: 64, version: '0.0.1', updateableFrom: ['0.0.0'], downloadUrl: 'http://google.com', releaseDate: new Date(2013, 2, 13)},
+      {client: 'mbase', application: 'music', operatingSystems: 'mac',     bitVersion: 64, version: '0.0.1', updateableFrom: ['0.0.0'], downloadUrl: 'http://google.com', releaseDate: new Date(2013, 2, 13)},
+      {client: 'mbase', application: 'pos',   operatingSystems: 'windows', bitVersion: 64, version: '0.0.2', updateableFrom: ['0.0.1'], downloadUrl: 'http://google.com', releaseDate: new Date(2013, 2, 13)},
+      {client: 'mbase', application: 'pos',   operatingSystems: 'linux',   bitVersion: 64, version: '0.0.2', updateableFrom: ['0.0.1'], downloadUrl: 'http://google.com', releaseDate: new Date(2013, 2, 13)},
+      {client: 'mbase', application: 'pos',   operatingSystems: 'mac',     bitVersion: 64, version: '0.0.2', updateableFrom: ['0.0.1'], downloadUrl: 'http://google.com', releaseDate: new Date(2013, 2, 13)},      
+      {client: 'mbase', application: 'music', operatingSystems: 'windows', bitVersion: 64, version: '0.0.2', updateableFrom: ['0.0.1'], downloadUrl: 'http://google.com', releaseDate: new Date(2013, 2, 13)},
+      {client: 'mbase', application: 'music', operatingSystems: 'linux',   bitVersion: 64, version: '0.0.2', updateableFrom: ['0.0.1'], downloadUrl: 'http://google.com', releaseDate: new Date(2013, 2, 13)},
+      {client: 'mbase', application: 'music', operatingSystems: 'mac',     bitVersion: 64, version: '0.0.2', updateableFrom: ['0.0.1'], downloadUrl: 'http://google.com', releaseDate: new Date(2013, 2, 13)}
+    ];
+
+    var i = 0;
+    var addFakeData = function(done) {
+      for (i = 0; i < fakeVersions.length; i++) {
+        version.register({querystring:fakeVersions[i]}, callback);
+      }
+
+      done();
+    };
+
+    addFakeData(done);
+  });
+
+  afterEach(function (done) {
+    version.model.remove({}, function() {
+      db.connection.close(function () {
+        done();
+      });      
+    });
+  });
+
+  //search latest version
+  it('should search for latest version', function (done) {
+    var expectedVersion = {
+      url         : 'http://google.com',
+      version     : '0.0.2',
+      releaseDate : new Date(2013, 3, 13)
+    };
+
+    var currentVersion = {
+      querystring: {
+        client      : 'mbase',
+        application : 'pos',
+        os          : 'windows',
+        bitVersion  : 64,
+        version     : '0.0.1',
+        releaseDate : new Date(2013, 2, 13)
+      }
+    };
+
+    version.search(currentVersion, function (newVersion) {
+      expectedVersion.should.eql(newVersion);
       done();
     });
   });
 
-  describe('Versions', function(done){
-    it('should push a version to the server', function(done){
-      version.model.create({
-          client           : 'mbase',
-          application      : 'POS',
-          version          : '0.0.3',
-          updateableFrom   : ['0.0.1','0.0.2'],
-          operatingSystems : ['windows'],
-          bitVersion       : 64,
-          downloadUrl      : 'http://localhost/0.0.3/'
-
-      },function(err,res){
-
-        version.model.find({client:'mbase', application:'POS'},function(err,res){
-          res.length.should.be.equal(1);
-          done();
-        });
-      });
-
-    });
-  });
-
-  describe('fetchLatestVersions()', function (done) {
-    it('should return 2 array elements', function (done) {
-      var latest = ['0.0.2', '0.0.3'];
-      var args = {
-        querystring: {
-          client      : 'mbase',
-          application : 'pos',
-          os          : 'windows',
-          bit         : 64,
-          version     : '0.0.1'
-        }
-      };
-
-      version.fetchLatestVersions(args, function (results) {
-        // console.log(results);
-        // results.length.should.be.equal(0);
-        done();
-      });
-    });
-  });
 });
-//update/:client/:application/:os/:bit/:version
