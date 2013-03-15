@@ -10,6 +10,7 @@ var _versionSchema = new Schema({
   operatingSystems : Array,
   bitVersion       : Number,
   downloadUrl      : Array,
+  updateableRegions: Array,
   releaseDate      : {type: Date, 'default': Date.now}
 });
 
@@ -42,6 +43,10 @@ Version.register = function (_args, done) {
     if (err) { throw err; }
     done(v);
   });
+};
+
+Version.updateRegion = function (_args, done) {
+  console.log(_args);
 };
 
 Version.search = function (request, done) {
