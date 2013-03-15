@@ -13,4 +13,4 @@ exports.env = {
 exports.env[currentEnv] = true;
 
 exports.db = { dbname: this.appName.toLowerCase() + '_' + currentEnv};
-console.log("Executing in:",currentEnv);
+console.log("Executing in:", currentEnv);

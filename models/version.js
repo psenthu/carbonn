@@ -1,5 +1,6 @@
 var Schema = require('./dbConfig').Schema;
 var db     = require('./dbConfig').db;
+var util   = require('../lib/util.js');
 
 var _versionSchema = new Schema({
   client           : String,
@@ -8,49 +9,57 @@ var _versionSchema = new Schema({
   updateableFrom   : Array,
   operatingSystems : Array,
   bitVersion       : Number,
-  downloadUrl      : String,
+  downloadUrl      : Array,
   releaseDate      : {type: Date, 'default': Date.now}
 });
 
 var Version = db.model('Versions', _versionSchema);
 
-function searchVersions(request, done) {
+Version.searchVersions = function (request, done) {
   var qs = request.querystring;
   Version
     .find({
-      client         : qs.client,
-      operatingSystems             : qs.os,
-      updateableFrom : qs.version,
-      bitVersion     : qs.bitVersion,
-      application    : qs.application
+      client            : qs.client,
+      operatingSystems  : qs.os,
+      updateableFrom    : qs.version,
+      bitVersion        : qs.bitVersion,
+      application       : qs.application
     })
     .sort('version')
-    .select('version downloadUrl releaseDate')
-    .exec(function(err, versions){
-      if ( err ) {
+    .select('version downloadUrl releaseDate application')
+    .exec(function (err, versions) {
+      if (err) {
         throw err;
       }
-      done(err,versions);
+      done(err, versions);
     });
-
-}
-
-Version.searchVersions = searchVersions;
+};
 
 Version.register = function (_args, done) {
   var version = new Version(_args);
 
-  version.save(function (err,v) {
-    if ( err ) { throw err; }
+  version.save(function (err, v) {
+    if (err) { throw err; }
     done(v);
   });
-
 };
 
-Version.search = function(request, done) {
-  Version.searchVersions(request, function (err, list) {
-    if ( err ) { throw err; }
+Version.search = function (request, done) {
+  this.searchVersions(request, function (err, list) {
+    if (err) { throw err; }
     done(list);
+  });
+};
+
+Version.fetchLatestVersion = function (request, done) {
+  var qs = request.querystring;
+
+  this.searchVersions(request, function (err, list) {
+    if (err) { throw err; }
+
+    util.compareVersion(list, function (newList) {
+      done(newList[0] || []);
+    });
   });
 };
 

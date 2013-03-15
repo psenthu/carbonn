@@ -1,6 +1,6 @@
-var ApiServer = require('apiserver');
-var updateHandler = require('./lib/update-handler.js').UpdateHandler;
-var apiServer = new ApiServer({ port: 8080 });
+var ApiServer     = require('apiserver');
+var updateHandler = require('./lib/update-handler.js');
+var apiServer     = new ApiServer({ port: 8080 });
 
 apiServer.use(ApiServer.payloadParser());
 
@@ -20,5 +20,6 @@ apiServer.on('requestStart', function (pathname, time) {
 }).on('timeout', function (pathname) {
   console.info(' ☂ :: timedout :: %s', pathname);
 });
+
 exports.apiServer = apiServer;
 apiServer.listen();
