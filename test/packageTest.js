@@ -25,14 +25,19 @@ describe('post package information to the server', function (done) {
 
     request.post({
       uri  : "http://localhost:8080/upload",
-      body : data,
-      json : true
+      headers: {
+         'Content-Type':'application/x-www-form-urlencoded'
+      },
+      body:require('querystring').stringify(data)
+
     }, function (err, res, body) {
       if (err) {
         console.log(err);
       }
 
+      // console.log(body);
       var json = JSON.parse(body);
+      // console.log(body);
 
       json._id.should.not.be.empty;
       json.application.should.eql(data.application);
@@ -58,13 +63,13 @@ describe('post package information to the server', function (done) {
   //   data.version           = '0.0.3';
   //   data.updateableFrom    = ['0.0.1', '0.0.2'];
   //   data.downloadUrl       = ['http://google.com', 'http://yahoo.com'];
-    
+
   //   var options            = {};
   //   options.uri            = "http://localhost:8080/update/region";
   //   options.qs             = data;
   //   options.headers        = {'content-type': 'application/json'};
   //   options.method         = 'PUT';
-    
+
   //   Version.register(data, function (version) {
   //     delete data.downloadUrl; //remove url from collection
   //     data.downloadUrl = ['http://linkedin.com', 'http://facebook.com'];
