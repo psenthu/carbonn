@@ -24,7 +24,7 @@ The client application needs to trigger a call to the server to get information 
   ```
 
 The server would return a response as follows
-  
+```  
   {
       application:pos,
       version:0.0.2,
@@ -32,14 +32,14 @@ The server would return a response as follows
       releaseDate:2013-03-19T05:29:19.067Z,
       downloadUrl:['http://cdn.application.com/0.0.2.tar.gz', 'http://cdn2.application.com/0.0.2.tar.gz']
   }
-
+```
 ## Post package details
 
 During a deployment of a new version to an application server, the carbonn server should be updated with the latest package information. The update should be done by making a POST request to the server and pass the package manifest as post parameters.
 
 POST parameter details
 
-    ```
+```
     * client            = 'mbase';
     * application       = 'pos';
     * bitVersion        = 64;
@@ -48,4 +48,4 @@ POST parameter details
     * operatingSystems  = ['windows'];
     * updateableFrom    = ['0.0.1', '0.0.2'];
     * downloadUrl       = ['http://cdn.application.com/0.0.2.tar.gz', 'http://cdn2.application.com/0.0.2.tar.gz'];
-    ```
+```
