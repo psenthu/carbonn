@@ -10,11 +10,11 @@ You can install the carbonn server on your server and write your client applicat
 
   $ http://localhost:3000/manage/version/:client/:application/:os/:bitVersion/:version
 
-  :client - Name of the client
-  :application - Name of the application
-  :os - Operating system
-  :bitVersion - Whether 32 or 64 bit
-  :version - Current version of the client application
+  * :client - Name of the client
+  * :application - Name of the application
+  * :os - Operating system
+  * :bitVersion - Whether 32 or 64 bit
+  * :version - Current version of the client application
 
 Server response
   
