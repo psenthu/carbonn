@@ -36,6 +36,19 @@ Version.searchVersions = function (request, done) {
     });
 };
 
+Version.findOneVersion = function (filters, done) {
+  Version
+    .find(filters)
+    .sort('version')
+    .select('version downloadUrl releaseDate application updateableRegions')
+    .exec(function (err, versions) {
+      if (err) {
+        throw err;
+      }
+      done(err, versions);
+    });  
+}
+
 Version.register = function (_args, done) {
   var version = new Version(_args);
 
@@ -46,7 +59,27 @@ Version.register = function (_args, done) {
 };
 
 Version.updateRegion = function (_args, done) {
-  console.log(_args);
+  var newRegions = _args.updateableRegions;
+  delete _args.updateableRegions;
+
+  var query = this.findOneAndUpdate(_args, { updateableRegions: newRegions });
+  query.exec(function (err, record) {
+    if (err) { throw err; }
+
+    done(record);
+  });
+};
+
+Version.updateDownloadUrl = function (_args, done) {
+  var newUrl = _args.downloadUrl;
+  delete _args.downloadUrl;
+
+  var query = this.findOneAndUpdate(_args, { downloadUrl: newUrl });
+  query.exec(function (err, record) {
+    if (err) { throw err; }
+
+    done(record);
+  });
 };
 
 Version.search = function (request, done) {

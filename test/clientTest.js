@@ -20,7 +20,7 @@ describe('test update request to server', function (done) {
   });
 
   it('should return version info as JSON', function (done) {
-    var url            = 'http://localhost:8080/update/mbase/pos/linux/64/0.0.1';
+    var url            = 'http://localhost:8080/manage/version/mbase/pos/linux/64/0.0.1';
     var params         = {};
     params.apikey      = 'b%&@b(0p124KN';
     params.consumerkey = "s%1TAr@09RT1wwf";
@@ -42,7 +42,7 @@ describe('test update request to server', function (done) {
   });
 
   it('should return empty version info', function (done) {
-    var url            = 'http://localhost:8080/update/mbase/pos/linux/64/0.0.2';
+    var url            = 'http://localhost:8080/manage/version/mbase/pos/linux/64/0.0.2';
     var params         = {};
     params.apikey      = 'b%&@b(0p124KN';
     params.consumerkey = "s%1TAr@09RT1wwf";

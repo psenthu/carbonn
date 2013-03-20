@@ -1,14 +1,15 @@
-var ApiServer     = require('apiserver');
-var updateHandler = require('./lib/update-handler.js');
-var apiServer     = new ApiServer({ port: 8080 });
+var ApiServer       = require('apiserver');
+var Manage          = require('./lib/update-handler').Manage;
+var Routes          = require('./lib/update-handler').Routes;
+var apiServer       = new ApiServer({ port: 8080 });
 
 apiServer.use(ApiServer.payloadParser());
 
 // modules
-apiServer.addModule('1', 'update', updateHandler.handler);
+apiServer.addModule('1', 'manage', Manage);
 
 // custom routing
-apiServer.router.addRoutes(updateHandler.routes);
+apiServer.router.addRoutes(Routes);
 
 // events
 apiServer.on('requestStart', function (pathname, time) {
